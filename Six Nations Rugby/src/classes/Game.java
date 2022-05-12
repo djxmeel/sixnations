@@ -26,8 +26,36 @@ public class Game {
 	}
 	
 	public void play() {
-		// TODO Play game
+		int refereeSkill = 0;
+		int hostSkill = host.getOverallSkill();
+		int visitorSkill = visitor.getOverallSkill();
 		
+		for (Arbitro arbitro : referees) {
+			refereeSkill += arbitro.getPrecision();
+		}
+		
+		refereeSkill /= 3;
+		
+		hostScore = (int) (hostSkill * Math.random());
+		visitorScore = (int) (visitorSkill * Math.random());
+		
+		if(hostScore > visitorScore)
+			visitorScore += (refereeSkill * 5) / 100;
+		else if(hostScore < visitorScore)
+			hostScore += (refereeSkill * 5) / 100;
+		else {
+			visitorScore += (refereeSkill * 5) / 100;
+			hostScore += (refereeSkill * 5) / 100;			
+		}
+		
+		if(hostScore > visitorScore)
+			host.won();
+		else if(hostScore < visitorScore)
+			visitor.won();
+		else {
+			host.draw();
+			visitor.draw();
+		}
 	}
 	
 	@Override

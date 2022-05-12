@@ -8,8 +8,8 @@ public class Stadium {
 	private Naciones country;
 	ArrayList<Game> games;
 	
-	public Stadium(int capacity, Naciones country) {
-		this.capacity = capacity;
+	public Stadium(Naciones country) {
+		this.capacity = 3000 + (int)(Math.random()*3000);
 		this.country = country;
 	}
 

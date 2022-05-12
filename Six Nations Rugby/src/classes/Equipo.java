@@ -3,13 +3,14 @@ package classes;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Equipo {
+public class Equipo implements Comparable<Equipo>{
 	
 	private Naciones nation;
 	private int played;
 	private int victories;
 	private int losses;
 	private int draws;
+	private int points;
 	private ArrayList<Jugador> players;
 	private ArrayList<Jugador> alineacion;
 	private ArrayList<Entrenador> entrenadores;
@@ -19,6 +20,7 @@ public class Equipo {
 		this.players = players;
 		this.entrenadores = entrenadores;
 		this.alineacion = new ArrayList<>();
+		this.points = 0;
 	}
 	
 	public Equipo(Naciones nation) {
@@ -26,10 +28,21 @@ public class Equipo {
 		players = new ArrayList<>();
 		entrenadores = new ArrayList<>();
 		this.alineacion = new ArrayList<>();
+		this.points = 0;
 	}
 	
+	public int getPoints() {
+		return points;
+	}
+
+	public void won() {
+		this.points += 3;
+	}
 	
-	
+	public void draw() {
+		this.points += 1;
+	}
+
 	public ArrayList<Jugador> getAlineacion() {
 		return alineacion;
 	}
@@ -98,9 +111,34 @@ public class Equipo {
 	public void sortEquipo() {
 		Collections.sort(players);
 	}
+	
+	public int getOverallSkill() {
+		int coachesSkill = 0;
+		int playersSkill = 0;
+		int skill = 0;
+		
+		for (Jugador jugador : alineacion) {
+			playersSkill += jugador.getAverage();
+		}
+		
+		for (Entrenador entrenador : entrenadores) {
+			coachesSkill += entrenador.getExperience();
+		}
+		
+		playersSkill /= 15;
+		coachesSkill /= 3;
+		
+		skill = (playersSkill + coachesSkill) / 2;
+		
+		return skill;
+	}
 
-	public int calculatePoints() {
-		//TODO calculate points
+	@Override
+	public int compareTo(Equipo o) {
+		if(this.points < o.points)
+			return 1;
+		else if(this.points > o.points)
+			return -1;
 		return 0;
 	}
 }

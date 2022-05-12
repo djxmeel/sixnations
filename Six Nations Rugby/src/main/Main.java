@@ -30,12 +30,18 @@ public class Main {
 		
 		while(select >= 0) {
 			System.out.println("\nPlayers ("+players.size()+"/180) Coachs ("+trainers.size()+"/18) Teams ("+teams.size()+"/6) Referees ("+referees.size()+") Stadiums ("+stadiums.size()+")");
-			System.out.println("1. Generate data");
-			System.out.println("2. Set Rosters");
-			System.out.println("3. Show Players");
-			System.out.println("4. Show Rosters");
-			System.out.println("5. Clear data");
-			System.out.println("6. Generate tournament");
+			System.out.println("1. Generate data and set rosters");
+			System.out.println("2. Show Players");
+			System.out.println("3. Show Rosters");
+			System.out.println("4. Clear data");
+			System.out.println("5. Generate tournament");
+			if(tournament != null) {
+				System.out.println("6. Play tournament");
+				System.out.println("7. Play day");
+				if(tournament.getGamesPlayed() == 15) {
+					System.out.println("8. Show results");
+				}
+			}
 			
 			select = sc.nextInt();
 			
@@ -47,22 +53,31 @@ public class Main {
 				createReferees();
 				createStadiums();
 				assignTeams();
-				break;
-			case 2:				
 				setRosters();
-				System.out.println("Rosters set.\n");
 				break;
-			case 3:
+			case 2:
 				showPlayers();				
 				break;
-			case 4:
+			case 3:
 				showRosters();
 				break;
-			case 5:
+			case 4:
 				clearData();
 				break;
-			case 6:
+			case 5:
 				createTournament();
+				break;
+			case 6:
+				if(tournament.getDays() == 0 || tournament.getDays() == 5)
+					tournament.playTournament();
+				else System.out.println("Tournament is already started");
+				break;
+			case 7:
+				tournament.playDay();
+				break;
+			case 8:
+				tournament.showResults();
+				break;
 			default:
 				break;
 			}
@@ -187,11 +202,9 @@ public class Main {
 	private static void createStadiums() {		
 		stadiums.clear();
 		Naciones nations[] = Naciones.values();
-		int capacity;
 		
 		for (int i = 0; i < 6; i++) {
-			capacity = 3000 + (int)(Math.random()*3000);
-			stadiums.add(new Stadium(capacity ,nations[i]));
+			stadiums.add(new Stadium(nations[i]));
 		}
 	}
 	
@@ -204,6 +217,5 @@ public class Main {
 	private static void createTournament() {
 		tournament = new Torneo(teams, referees, stadiums);
 		tournament.generateGames();
-		System.out.println(tournament);
 	}
 }
