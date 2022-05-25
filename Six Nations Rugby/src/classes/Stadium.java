@@ -1,16 +1,17 @@
 package classes;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Stadium {
 
 	private int capacity;
 	private Naciones country;
-	ArrayList<Game> games;
+	HashSet<Game> gamesHosted;
 	
 	public Stadium(Naciones country) {
 		this.capacity = 3000 + (int)(Math.random()*3000);
 		this.country = country;
+		this.gamesHosted = new HashSet<>();
 	}
 
 	public int getCapacity() {
@@ -25,12 +26,12 @@ public class Stadium {
 		return country;
 	}
 
-	public ArrayList<Game> getGames() {
-		return games;
+	public HashSet<Game> getGames() {
+		return gamesHosted;
 	}
 
-	public void addGame(Game game) {
-		this.games.add(game);
+	public boolean addGame(Game game) {
+			return this.gamesHosted.add(game);
 	}
 	
 	

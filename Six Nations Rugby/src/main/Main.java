@@ -1,7 +1,9 @@
 package main;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import classes.SqlManager;
 import classes.Arbitro;
 import classes.Entrenador;
 import classes.Equipo;
@@ -23,6 +25,7 @@ public class Main {
 	public static void main(String[] args) {
 		
 		System.out.println("* SIX NATIONS RUGBY TOURNAMENT *");
+		
 		menu();
 	}
 	
@@ -47,6 +50,7 @@ public class Main {
 			
 			switch (select) {
 			case 1:
+				clearData();
 				createPlayers();
 				createTrainers();
 				createTeams();
@@ -54,6 +58,7 @@ public class Main {
 				createStadiums();
 				assignTeams();
 				setRosters();
+				updateDatabase();
 				break;
 			case 2:
 				showPlayers();				
@@ -82,9 +87,45 @@ public class Main {
 				break;
 			}
 		}
-		
+		sc.close();
 	}
 
+	private static void updateDatabase() {
+		SqlManager.sqlConnection();
+		
+		for(int i=0; i<teams.size() ;i++) {
+			Equipo team = teams.get(i);
+			SqlManager.insertTeam(i+1, team.getCountry().toString());
+		}
+		
+		int teamAssign = 1;
+		
+		for(int i=0; i < players.size() ;i++) {
+			Jugador player =  players.get(i);
+			
+			SqlManager.insertPlayer(teamAssign, player.getFullname(), player.getPeso(), player.getStrength(), player.getSpeed(), player.getResistence());
+			
+			if((i+1) % 30 == 0) teamAssign++;
+		}
+		
+		for(int i=0; i<stadiums.size() ;i++) {
+			Stadium stadium = stadiums.get(i);
+			SqlManager.insertStadium(i+1,stadium.getCountry().toString(), stadium.getCapacity());
+		}
+		
+		for(int i=0; i<referees.size() ;i++) {
+			Arbitro referee = referees.get(i);
+			SqlManager.insertReferee(i+1, referee.getFullname(), referee.getPeso(), referee.getPrecision());
+		}
+		
+		for(int i=0; i<trainers.size() ;i++) {
+			Entrenador trainer = trainers.get(i);
+			SqlManager.insertTrainer(trainer.getFullname(), trainer.getPeso(), trainer.getExperience());
+		}
+		
+		SqlManager.closeConnection();
+	}
+	
 	private static void createPlayers() {
 		String fullname;
 		float peso;
@@ -108,6 +149,9 @@ public class Main {
 	}
 	
 	private static void clearData() {
+		SqlManager.sqlConnection();
+		SqlManager.truncateTables();
+		SqlManager.closeConnection();
 		teams.clear();
 		players.clear();
 		stadiums.clear();
@@ -116,7 +160,7 @@ public class Main {
 	}
 	
 	private static void showPlayers() {
-		for (Jugador jugador : players) { // TODO ENUM FIX
+		for (Jugador jugador : players) {
 			Naciones team;
 			team =  jugador.getEquipo().getCountry();
 			
@@ -125,7 +169,7 @@ public class Main {
 	}
 	
 	private static void showRosters() {
-		for (Equipo equipo : teams) { // TODO ENUM FIX
+		for (Equipo equipo : teams) {
 			Naciones team;
 			team =  equipo.getCountry();
 			int c = 1;
@@ -158,6 +202,7 @@ public class Main {
 			
 		for (int i = 0; i < 6; i++) {
 			teams.add(new Equipo(nations[i]));
+			
 		}
 	}
 	

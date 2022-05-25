@@ -30,6 +30,11 @@ public class Game {
 		int hostSkill = host.getOverallSkill();
 		int visitorSkill = visitor.getOverallSkill();
 		
+		if(!this.stadium.addGame(this)) {
+			System.out.println("Game already played!");
+			return;
+		}
+			
 		for (Arbitro arbitro : referees) {
 			refereeSkill += arbitro.getPrecision();
 		}
