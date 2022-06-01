@@ -31,6 +31,8 @@ public class Torneo {
 			gameReferees2.add(referees.get(i+3));
 		}
 		
+		SqlManager.sqlConnection();
+		
 		for (int i = 0; i < 5; i++) {
 			for (int j = i+1; j <= 5; j++) {
 				if(counter>5) counter=0;
@@ -46,10 +48,13 @@ public class Torneo {
 			}
 		}
 		
+		SqlManager.closeConnection();
+		
 		Collections.shuffle(games);
 	}
 	
 	public void playTournament() {
+		SqlManager.sqlConnection();
 		if(games.size() == 15) {
 			if(days == 5 && gamesPlayed == 15) {
 				System.out.println("Tournament is done.");
@@ -61,9 +66,11 @@ public class Torneo {
 				days=5;
 			}
 		}
+		SqlManager.closeConnection();
 	}
 	
 	public void playDay() {
+		SqlManager.sqlConnection();
 		if(games.size() == 15) {
 		
 			if(days == 5 && gamesPlayed==15) {
@@ -80,6 +87,7 @@ public class Torneo {
 				days++;
 			}
 		}
+		SqlManager.closeConnection();
 	}
 	
 	public void showResults() {
@@ -100,6 +108,7 @@ public class Torneo {
 			System.out.print(team.getCountry() + " | " + team.getPoints() +"\n");
 		}
 	}
+	
 	
 	@Override
 	public String toString() {
@@ -124,6 +133,14 @@ public class Torneo {
 
 	public int getDays() {
 		return days;
+	}
+	
+	public void setDays(int days) {
+		 this.days = days;
+	}
+	
+	public void setPlayed(int played) {
+		 this.gamesPlayed = played;
 	}
 
 	public int getGamesPlayed() {

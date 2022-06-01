@@ -5,7 +5,8 @@ import java.util.Collections;
 
 public class Equipo implements Comparable<Equipo>{
 	
-	private Naciones nation;
+	private int id;
+	private String nation;
 	private int played;
 	private int victories;
 	private int losses;
@@ -15,20 +16,51 @@ public class Equipo implements Comparable<Equipo>{
 	private ArrayList<Jugador> alineacion;
 	private ArrayList<Entrenador> entrenadores;
 	
-	public Equipo(Naciones nation, ArrayList<Jugador> players, ArrayList<Entrenador> entrenadores) {
+	public Equipo(String nation, ArrayList<Jugador> players, ArrayList<Entrenador> entrenadores) {
 		this.nation = nation;
 		this.players = players;
 		this.entrenadores = entrenadores;
 		this.alineacion = new ArrayList<>();
 		this.points = 0;
+		this.played = 0;
+		this.victories = 0;
+		this.losses = 0;
+		this.draws = 0;
+		this.id = 0;
 	}
 	
-	public Equipo(Naciones nation) {
+	public Equipo() {
+		this.nation = "";
+		players = new ArrayList<>();
+		entrenadores = new ArrayList<>();
+		this.alineacion = new ArrayList<>();
+		this.points = 0;
+		this.played = 0;
+		this.victories = 0;
+		this.losses = 0;
+		this.draws = 0;
+		this.id = 0;
+	}
+	
+	public Equipo(String nation) {
 		this.nation = nation;
 		players = new ArrayList<>();
 		entrenadores = new ArrayList<>();
 		this.alineacion = new ArrayList<>();
 		this.points = 0;
+		this.played = 0;
+		this.victories = 0;
+		this.losses = 0;
+		this.draws = 0;
+		this.id = 0;
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	public int getPoints() {
@@ -37,10 +69,19 @@ public class Equipo implements Comparable<Equipo>{
 
 	public void won() {
 		this.points += 3;
+		this.played++;
+		this.victories++;
 	}
 	
 	public void draw() {
 		this.points += 1;
+		this.played++;
+		this.draws++;
+	}
+	
+	public void lost() {
+		this.played++;
+		this.losses++;
 	}
 
 	public ArrayList<Jugador> getAlineacion() {
@@ -51,11 +92,11 @@ public class Equipo implements Comparable<Equipo>{
 		this.alineacion = alineacion;
 	}
 
-	public Naciones getCountry() {
+	public String getCountry() {
 		return nation;
 	}
 
-	public void setCountry(Naciones country) {
+	public void setCountry(String country) {
 		this.nation = country;
 	}
 
@@ -88,6 +129,27 @@ public class Equipo implements Comparable<Equipo>{
 	public void addDraw() {
 		draws++;
 		played++;
+	}
+	
+
+	public void setPlayed(int played) {
+		this.played = played;
+	}
+
+	public void setVictories(int victories) {
+		this.victories = victories;
+	}
+
+	public void setLosses(int losses) {
+		this.losses = losses;
+	}
+
+	public void setDraws(int draws) {
+		this.draws = draws;
+	}
+
+	public void setPoints(int points) {
+		this.points = points;
 	}
 
 	public ArrayList<Jugador> getPlayers() {

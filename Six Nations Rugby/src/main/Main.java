@@ -26,6 +26,23 @@ public class Main {
 		
 		System.out.println("* SIX NATIONS RUGBY TOURNAMENT *");
 		
+		SqlManager.sqlConnection();
+		if(SqlManager.checkDatabase()) {
+			System.out.println("Fetching data...");
+			tournament = SqlManager.fetchData(players, trainers, referees, teams, stadiums, tournament);
+			setRosters();
+			
+			System.out.println(tournament.getDays());
+			System.out.println(tournament.getGamesPlayed());
+			System.out.println(tournament.getGames());
+			System.out.println(tournament.getReferees());
+			System.out.println(tournament.getStadiums());
+			System.out.println(tournament.getTeams());
+		} else {
+			System.out.println("NO DATA");
+		}
+		SqlManager.closeConnection();
+		
 		menu();
 	}
 	
@@ -95,32 +112,37 @@ public class Main {
 		
 		for(int i=0; i<teams.size() ;i++) {
 			Equipo team = teams.get(i);
-			SqlManager.insertTeam(i+1, team.getCountry().toString());
+			team.setId(SqlManager.insertTeam(team.getCountry().toString()));
 		}
 		
-		int teamAssign = 1;
+		int teamAssign = 0;
 		
 		for(int i=0; i < players.size() ;i++) {
 			Jugador player =  players.get(i);
+			int teamId = teams.get(teamAssign).getId();
 			
-			SqlManager.insertPlayer(teamAssign, player.getFullname(), player.getPeso(), player.getStrength(), player.getSpeed(), player.getResistence());
+			player.setId(SqlManager.insertPlayer(teamId, player.getFullname(), player.getPeso(), player.getStrength(), player.getSpeed(), player.getResistence()));
 			
 			if((i+1) % 30 == 0) teamAssign++;
 		}
 		
 		for(int i=0; i<stadiums.size() ;i++) {
 			Stadium stadium = stadiums.get(i);
-			SqlManager.insertStadium(i+1,stadium.getCountry().toString(), stadium.getCapacity());
+			stadium.setId(SqlManager.insertStadium(stadium.getCountry().toString(), stadium.getCapacity()));
 		}
 		
 		for(int i=0; i<referees.size() ;i++) {
 			Arbitro referee = referees.get(i);
-			SqlManager.insertReferee(i+1, referee.getFullname(), referee.getPeso(), referee.getPrecision());
+			referee.setId(SqlManager.insertReferee(referee.getFullname(), referee.getPeso(), referee.getPrecision()));
 		}
+		
+		teamAssign = 0;
 		
 		for(int i=0; i<trainers.size() ;i++) {
 			Entrenador trainer = trainers.get(i);
-			SqlManager.insertTrainer(trainer.getFullname(), trainer.getPeso(), trainer.getExperience());
+			int teamId = teams.get(teamAssign).getId();
+			trainer.setId(SqlManager.insertTrainer(teamId, trainer.getFullname(), trainer.getPeso(), trainer.getExperience()));
+			if((i+1) % 3 == 0) teamAssign++;
 		}
 		
 		SqlManager.closeConnection();
@@ -157,11 +179,12 @@ public class Main {
 		stadiums.clear();
 		referees.clear();
 		trainers.clear();
+		tournament = null;
 	}
 	
 	private static void showPlayers() {
 		for (Jugador jugador : players) {
-			Naciones team;
+			String team;
 			team =  jugador.getEquipo().getCountry();
 			
 			System.out.println(jugador.getFullname() + " Team: "+ team + " Weight: " + jugador.getPeso() + " Avg: "+ jugador.getAverage() +" Str: "+ jugador.getStrength() +" Spd: "+ jugador.getSpeed()+ " Res: "+ jugador.getResistence());
@@ -170,7 +193,7 @@ public class Main {
 	
 	private static void showRosters() {
 		for (Equipo equipo : teams) {
-			Naciones team;
+			String team;
 			team =  equipo.getCountry();
 			int c = 1;
 			for(Jugador jugador : equipo.getAlineacion()) {
@@ -201,7 +224,7 @@ public class Main {
 		Naciones nations[] = Naciones.values();
 			
 		for (int i = 0; i < 6; i++) {
-			teams.add(new Equipo(nations[i]));
+			teams.add(new Equipo(nations[i].toString()));
 			
 		}
 	}
@@ -249,7 +272,7 @@ public class Main {
 		Naciones nations[] = Naciones.values();
 		
 		for (int i = 0; i < 6; i++) {
-			stadiums.add(new Stadium(nations[i]));
+			stadiums.add(new Stadium(nations[i].toString()));
 		}
 	}
 	
@@ -260,7 +283,10 @@ public class Main {
 	}
 	
 	private static void createTournament() {
-		tournament = new Torneo(teams, referees, stadiums);
-		tournament.generateGames();
+		if(teams.size() > 0 && referees.size() > 0 && stadiums.size() > 0) {
+			tournament = new Torneo(teams, referees, stadiums);
+			tournament.generateGames();			
+		} else 
+			System.out.println("No data found!");
 	}
 }

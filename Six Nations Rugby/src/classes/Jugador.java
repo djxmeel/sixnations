@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Jugador extends Persona implements Comparable<Jugador> {
 	
+	private int id;
 	private int speed;
 	private int strength;
 	private int resistence;
@@ -17,6 +18,7 @@ public class Jugador extends Persona implements Comparable<Jugador> {
 		this.resistence = resistence;
 		this.equipo = equipo;
 		this.average = (this.speed + this.strength + this.resistence) / 3;
+		this.id = 0;
 	}
 	
 	public Jugador(String fullname, float peso, int speed, int strength, int resistence) {
@@ -25,6 +27,7 @@ public class Jugador extends Persona implements Comparable<Jugador> {
 		this.strength = strength;
 		this.resistence = resistence;
 		this.average = (this.speed + this.strength + this.resistence) / 3;
+		this.id = 0;
 	}
 	
 	@Override
@@ -42,6 +45,14 @@ public class Jugador extends Persona implements Comparable<Jugador> {
 		int avg =(this.speed + this.strength + this.resistence) / 3;
 		return "Jugador [Avg=" + avg + " speed=" + speed + ", strength=" + strength + ", resistence=" + resistence + ", equipo="
 				+ equipo.getCountry() + "]";
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	public int getAverage() {

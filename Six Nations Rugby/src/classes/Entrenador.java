@@ -4,18 +4,29 @@ import java.util.ArrayList;
 
 public class Entrenador extends Persona {
 	
+	private int id;
 	private int experience;
 	private Equipo equipo;
 
 	public Entrenador(String fullname, float peso, int experience, Equipo equipo) {
 		super(fullname, peso);
 		this.experience = experience;
-		this.equipo = equipo;		
+		this.equipo = equipo;
+		this.id = 0;
 	}
 
 	public Entrenador(String fullname, float peso, int experience) {
 		super(fullname, peso);
 		this.experience = experience;
+		this.id = 0;
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public int getExperience() {

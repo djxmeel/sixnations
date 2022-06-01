@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class Game {
 	
+	private int id;
 	private Equipo host;
 	private Equipo visitor;
 	private ArrayList<Arbitro> referees;
@@ -16,19 +17,27 @@ public class Game {
 		this.host = host;
 		this.visitor = visitor;
 		this.referees = referees;
+		for (Arbitro arbitro : referees) {
+			arbitro.addGame(this, null);
+		}
 		this.stadium = stadium;
+		this.id = SqlManager.insertGame(host.getId(), visitor.getId(), stadium.getId(), referees);
 	}
 	
 	public Game(Equipo host, Equipo visitor, ArrayList<Arbitro> referees) {
 		this.host = host;
 		this.visitor = visitor;
 		this.referees = referees;
+		for (Arbitro arbitro : referees) {
+			arbitro.addGame(this, null);
+		}
 	}
 	
 	public void play() {
 		int refereeSkill = 0;
 		int hostSkill = host.getOverallSkill();
 		int visitorSkill = visitor.getOverallSkill();
+		String acta;
 		
 		if(!this.stadium.addGame(this)) {
 			System.out.println("Game already played!");
@@ -53,20 +62,40 @@ public class Game {
 			hostScore += (refereeSkill * 5) / 100;			
 		}
 		
-		if(hostScore > visitorScore)
+		SqlManager.insertScores(hostScore, visitorScore, this.id);
+		
+		if(hostScore > visitorScore) {
 			host.won();
-		else if(hostScore < visitorScore)
+			visitor.lost();
+			referees.get(0).acta(this, host.getCountry().toString());			
+		}
+		else if(hostScore < visitorScore) {
 			visitor.won();
+			host.lost();
+			referees.get(0).acta(this, visitor.getCountry().toString());			
+		}
 		else {
 			host.draw();
 			visitor.draw();
+			referees.get(0).acta(this);
 		}
+		
+		SqlManager.updateTeamStats(host.getId(), host.getPlayed(), host.getVictory(), host.getLosses(), host.getDraws(), host.getPoints());
+		SqlManager.updateTeamStats(visitor.getId(), visitor.getPlayed(), visitor.getVictory(), visitor.getLosses(), visitor.getDraws(), visitor.getPoints());
 	}
 	
 	@Override
 	public String toString() {
 		return "\nGame [host=" + host.getCountry() + ", visitor=" + visitor.getCountry() + ", referees=" + this.referees + ", stadium=" + stadium.getCountry()
 				+ ", hostScore=" + hostScore + ", visitorScore=" + visitorScore + "]";
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public Equipo getHost() {
@@ -99,6 +128,7 @@ public class Game {
 
 	public void setStadium(Stadium stadium) {
 		this.stadium = stadium;
+		stadium.addGame(this);
 	}
 
 	public int getHostScore() {

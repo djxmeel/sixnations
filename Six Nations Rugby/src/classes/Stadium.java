@@ -3,17 +3,41 @@ package classes;
 import java.util.HashSet;
 
 public class Stadium {
-
+	
+	private int id;
 	private int capacity;
-	private Naciones country;
+	private String country;
 	HashSet<Game> gamesHosted;
 	
-	public Stadium(Naciones country) {
+	public Stadium() {
+		this.capacity = 3000 + (int)(Math.random()*3000);
+		this.country = "";
+		this.gamesHosted = new HashSet<>();
+		this.id = 0;
+	}
+	
+	public Stadium(String country) {
 		this.capacity = 3000 + (int)(Math.random()*3000);
 		this.country = country;
 		this.gamesHosted = new HashSet<>();
+		this.id = 0;
 	}
-
+	
+	public Stadium(String country, int capacity) {
+		this.capacity = capacity;
+		this.country = country;
+		this.gamesHosted = new HashSet<>();
+		this.id = 0;
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public int getCapacity() {
 		return capacity;
 	}
@@ -22,7 +46,7 @@ public class Stadium {
 		this.capacity = capacity;
 	}
 	
-	public Naciones getCountry() {
+	public String getCountry() {
 		return country;
 	}
 
@@ -31,7 +55,7 @@ public class Stadium {
 	}
 
 	public boolean addGame(Game game) {
-			return this.gamesHosted.add(game);
+		return this.gamesHosted.add(game);
 	}
 	
 	
