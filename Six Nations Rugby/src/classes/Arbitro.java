@@ -1,27 +1,50 @@
 package classes;
 
-public class Arbitro extends Persona {
+import java.util.HashMap;
 
+public class Arbitro extends Persona {
+	
+	private int id;
 	private int precision;
+	private HashMap<Game, String> games;
 
 	public Arbitro(String fullname, float peso, int precision) {
 		super(fullname, peso);
 		this.precision = precision;
+		this.games = new HashMap<>();
+		this.id = 0;
 	}
 	
-	public void startGame() {
-		// TODO start game 
+	public void acta(Game game) {
+		String acta = "It's a draw!";
+		
+		games.put(game, acta);
+		
 	}
 	
-	public void endGame() {
-		// TODO end game
+	public void insertActa(Game game) {
+		SqlManager.insertActa(game.getId(), this.id, games.get(game));
 	}
-
+	
+	public void acta(Game game, String winner) {
+		String acta = "The winner is "+ winner;
+		
+		games.put(game, acta);
+	}
+	
 	@Override
 	public String toString() {
 		return this.getFullname();
 	}
 
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public int getPrecision() {
 		return precision;
 	}
@@ -29,4 +52,13 @@ public class Arbitro extends Persona {
 	public void setPrecision(int precision) {
 		this.precision = precision;
 	}
+	
+	public HashMap<Game, String> getGames() {
+		return games;
+	}
+	
+	public void addGame(Game game, String acta) {
+		games.put(game, acta);
+	}
+	
 }

@@ -1,18 +1,43 @@
 package classes;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 public class Stadium {
-
-	private int capacity;
-	private Naciones country;
-	ArrayList<Game> games;
 	
-	public Stadium(int capacity, Naciones country) {
+	private int id;
+	private int capacity;
+	private String country;
+	HashSet<Game> gamesHosted;
+	
+	public Stadium() {
+		this.capacity = 3000 + (int)(Math.random()*3000);
+		this.country = "";
+		this.gamesHosted = new HashSet<>();
+		this.id = 0;
+	}
+	
+	public Stadium(String country) {
+		this.capacity = 3000 + (int)(Math.random()*3000);
+		this.country = country;
+		this.gamesHosted = new HashSet<>();
+		this.id = 0;
+	}
+	
+	public Stadium(String country, int capacity) {
 		this.capacity = capacity;
 		this.country = country;
+		this.gamesHosted = new HashSet<>();
+		this.id = 0;
 	}
-
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
 	public int getCapacity() {
 		return capacity;
 	}
@@ -21,16 +46,16 @@ public class Stadium {
 		this.capacity = capacity;
 	}
 	
-	public Naciones getCountry() {
+	public String getCountry() {
 		return country;
 	}
 
-	public ArrayList<Game> getGames() {
-		return games;
+	public HashSet<Game> getGames() {
+		return gamesHosted;
 	}
 
-	public void addGame(Game game) {
-		this.games.add(game);
+	public boolean addGame(Game game) {
+		return this.gamesHosted.add(game);
 	}
 	
 	
