@@ -94,21 +94,28 @@ public class Torneo {
 	}
 	
 	public void showResults() {
+		FileHandler.resetFile();
 		System.out.println("* SIX NATIONS TOURNAMENT RESULTS *");
+		FileHandler.outputResults("* SIX NATIONS TOURNAMENT RESULTS *");
 		int n = 0;
 		for (int i = 0; i < 5; i++) {
 			System.out.println("\nDAY " + (i+1) + "\n");
+			FileHandler.outputResults("\nDAY " + (i+1));
 			for (int j = 0; j < 3; j++) {
 				System.out.println("Game " + (n+1) + ": " + games.get(n).getHost().getCountry() + " " + games.get(n).getHostScore() + " - " + games.get(n).getVisitorScore() + " " + games.get(n).getVisitor().getCountry());			
+				FileHandler.outputResults("Game " + (n+1) + ": " + games.get(n).getHost().getCountry() + " " + games.get(n).getHostScore() + " - " + games.get(n).getVisitorScore() + " " + games.get(n).getVisitor().getCountry());
 				n++;
 			}
 		}
 		
 		Collections.sort(teams);
 		System.out.println("\nSCOREBOARD\n");
+		FileHandler.outputResults("\nSCOREBOARD\n");
 		System.out.println("COUNTRY | POINTS");
+		FileHandler.outputResults("COUNTRY \t| POINTS");
 		for (Equipo team : teams) {
 			System.out.print(team.getCountry() + " | " + team.getPoints() +"\n");
+			FileHandler.outputResults(team.getCountry() + " \t| " + team.getPoints());
 		}
 	}
 	

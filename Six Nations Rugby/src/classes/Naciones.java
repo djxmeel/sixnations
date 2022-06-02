@@ -2,9 +2,9 @@ package classes;
 
 public enum Naciones {
 	 ENGLAND, 
-	 FRANCE, 
+	 FRANCE,
 	 IRELAND, 
-	 ITALY, 
-	 SCOTLAND, 
+	 ITALY,
+	 SCOTLAND,
 	 WALES
 }

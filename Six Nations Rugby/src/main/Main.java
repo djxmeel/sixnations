@@ -190,6 +190,7 @@ public class Main {
 		referees.clear();
 		trainers.clear();
 		tournament = null;
+		FileHandler.resetFile();
 	}
 	
 	private static void showPlayers() {

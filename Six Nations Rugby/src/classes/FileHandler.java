@@ -5,6 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+
 
 public class FileHandler {
 	
@@ -56,7 +60,45 @@ public class FileHandler {
 		return autoClear;
 	}
 	
-	public static void outputResults() {
-		
+	public static void outputResults(String line) {
+		  String filename="results.txt";
+		    File f=new File(filename);
+		    if(f.exists()) {
+		    	try {
+				      BufferedWriter bfw=new BufferedWriter(new FileWriter( f , true));
+				      bfw.write(line);     
+				      bfw.newLine();
+				      bfw.close();
+				      
+				    }
+				    catch(IOException e) {
+				      System.out.println(e.getMessage());
+				    }
+				    
+				    catch(Exception e) {
+				      e.printStackTrace();
+				    }
+		    }
+	}
+	
+	public static void resetFile() {
+		String filename="results.txt";
+	    File f=new File(filename);
+	    if(f.exists()) {
+	    	try {
+			      BufferedWriter bfw=new BufferedWriter(new FileWriter(f));
+			      bfw.write("");     
+			      bfw.newLine();
+			      bfw.close();
+			      
+			    }
+			    catch(IOException e) {
+			      System.out.println(e.getMessage());
+			    }
+			    
+			    catch(Exception e) {
+			      e.printStackTrace();
+			    }
+	    }
 	}
 }
