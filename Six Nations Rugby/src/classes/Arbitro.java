@@ -18,15 +18,17 @@ public class Arbitro extends Persona {
 	public void acta(Game game) {
 		String acta = "It's a draw!";
 		
-		SqlManager.insertActa(game.getId(), this.id, acta);
 		games.put(game, acta);
 		
+	}
+	
+	public void insertActa(Game game) {
+		SqlManager.insertActa(game.getId(), this.id, games.get(game));
 	}
 	
 	public void acta(Game game, String winner) {
 		String acta = "The winner is "+ winner;
 		
-		SqlManager.insertActa(game.getId(), this.id, acta);
 		games.put(game, acta);
 	}
 	

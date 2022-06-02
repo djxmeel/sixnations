@@ -207,6 +207,22 @@ public class SqlManager {
 				
 				Game fetchedGame = new Game(id, host, visitor, gameRefs, stadium);
 				
+				query2 = "SELECT * FROM enforce WHERE id_game=" + fetchedGame.getId();
+				stmt2 = con.createStatement();
+				st2 = stmt2.executeQuery(query2);
+				
+				while(st2.next()) {
+					if(st2.getString("acta") != null) {						
+						for (Arbitro referee : gameRefs) {
+							if(st2.getInt("id_referee") == referee.getId()) {
+								referee.acta(fetchedGame, st2.getString("acta"));
+							}
+						}
+					}
+				}
+				st2.close();
+				stmt2.close();
+				
 				fetchedGame.setHostScore(hostScore);
 				fetchedGame.setVisitorScore(visitorScore);				
 				

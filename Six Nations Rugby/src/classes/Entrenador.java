@@ -49,11 +49,11 @@ public class Entrenador extends Persona {
 		this.equipo = null;
 	}
 	
-	public void createRoster() {
+	public void createRoster(int roster) {
 		equipo.sortEquipo();
 		ArrayList<Jugador> alineacion = new ArrayList<>();
 		
-		for (int i = 0; i < 15; i++) {
+		for (int i = 0; i < roster; i++) {
 			alineacion.add(equipo.getPlayers().get(i));
 		}
 		

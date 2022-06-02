@@ -67,17 +67,20 @@ public class Game {
 		if(hostScore > visitorScore) {
 			host.won();
 			visitor.lost();
-			referees.get(0).acta(this, host.getCountry().toString());			
+			referees.get(0).acta(this, host.getCountry().toString());
+			referees.get(0).insertActa(this);
 		}
 		else if(hostScore < visitorScore) {
 			visitor.won();
 			host.lost();
-			referees.get(0).acta(this, visitor.getCountry().toString());			
+			referees.get(0).acta(this, visitor.getCountry().toString());	
+			referees.get(0).insertActa(this);
 		}
 		else {
 			host.draw();
 			visitor.draw();
 			referees.get(0).acta(this);
+			referees.get(0).insertActa(this);
 		}
 		
 		SqlManager.updateTeamStats(host.getId(), host.getPlayed(), host.getVictory(), host.getLosses(), host.getDraws(), host.getPoints());

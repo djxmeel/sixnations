@@ -11,6 +11,7 @@ import classes.Jugador;
 import classes.Naciones;
 import classes.Stadium;
 import classes.Torneo;
+import classes.FileHandler;
 
 public class Main {
 	static private Scanner sc = new Scanner(System.in);
@@ -21,24 +22,31 @@ public class Main {
 	static private ArrayList<Equipo> teams = new ArrayList<>();
 	static private ArrayList<Stadium> stadiums = new ArrayList<>();
 	static private Torneo tournament;
+	static private int teamConfig;
+	static private int coachConfig;
+	static private int playerConfig;
+	static private int rosterConfig; 
 	
 	public static void main(String[] args) {
 		
 		System.out.println("* SIX NATIONS RUGBY TOURNAMENT *");
 		
+		int[] config = new int[4];
+		boolean autoClear = FileHandler.readConfig(config);
+		
+		teamConfig = config[0];
+		coachConfig = config[1];
+		playerConfig = config[2];
+		rosterConfig = config[3];
+		
 		SqlManager.sqlConnection();
-		if(SqlManager.checkDatabase()) {
+		if(SqlManager.checkDatabase() && !autoClear) {
 			System.out.println("Fetching data...");
 			tournament = SqlManager.fetchData(players, trainers, referees, teams, stadiums, tournament);
 			setRosters();
 			
-			/*System.out.println(tournament.getDays());
-			System.out.println(tournament.getGamesPlayed());
-			System.out.println(tournament.getGames());
-			System.out.println(tournament.getReferees());
-			System.out.println(tournament.getStadiums());
-			System.out.println(tournament.getTeams());*/
 		} else {
+			clearData();
 			System.out.println("NO DATA");
 		}
 		SqlManager.closeConnection();
@@ -225,7 +233,7 @@ public class Main {
 		teams.clear();
 		Naciones nations[] = Naciones.values();
 			
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < teamConfig; i++) {
 			teams.add(new Equipo(nations[i].toString()));
 			
 		}
@@ -238,12 +246,12 @@ public class Main {
 			
 			for (int i = 0; i < 6; i++) {
 				
-				for (int j = 0; j < 30; j++) {
+				for (int j = 0; j < playerConfig; j++) {
 					teams.get(i).addPlayer(players.get(playerCounter));
 					playerCounter++;
 				}
 				
-				for (int j = 0; j < 3; j++) {
+				for (int j = 0; j < coachConfig; j++) {
 					teams.get(i).addEntrenador(trainers.get(trainerCounter));
 					trainerCounter++;
 				}
@@ -280,7 +288,7 @@ public class Main {
 	
 	private static void setRosters() {
 		for (int i = 0; i < 6; i++) {
-			teams.get(i).getEntrenadores().get(0).createRoster();
+			teams.get(i).getEntrenadores().get(0).createRoster(rosterConfig);
 		}
 	}
 	
