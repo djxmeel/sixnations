@@ -35,13 +35,16 @@ public class Torneo {
 		
 		for (int i = 0; i < 5; i++) {
 			for (int j = i+1; j <= 5; j++) {
+				int id = 0;
 				if(counter>5) counter=0;
 				
 				if(swap) {
-					games.add(new Game(teams.get(i), teams.get(j), gameReferees1, stadiums.get(counter)));
+					id = SqlManager.insertGame(teams.get(i).getId(), teams.get(j).getId(), stadiums.get(counter).getId(), gameReferees1);
+					games.add(new Game(id, teams.get(i), teams.get(j), gameReferees1, stadiums.get(counter)));
 					swap = false;
 				}else {
-					games.add(new Game(teams.get(i), teams.get(j), gameReferees2, stadiums.get(counter)));
+					id = SqlManager.insertGame(teams.get(i).getId(), teams.get(j).getId(), stadiums.get(counter).getId(), gameReferees2);
+					games.add(new Game(id ,teams.get(i), teams.get(j), gameReferees2, stadiums.get(counter)));
 					swap = true;
 				}
 				counter++;

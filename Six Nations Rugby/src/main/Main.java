@@ -32,12 +32,12 @@ public class Main {
 			tournament = SqlManager.fetchData(players, trainers, referees, teams, stadiums, tournament);
 			setRosters();
 			
-			System.out.println(tournament.getDays());
+			/*System.out.println(tournament.getDays());
 			System.out.println(tournament.getGamesPlayed());
 			System.out.println(tournament.getGames());
 			System.out.println(tournament.getReferees());
 			System.out.println(tournament.getStadiums());
-			System.out.println(tournament.getTeams());
+			System.out.println(tournament.getTeams());*/
 		} else {
 			System.out.println("NO DATA");
 		}
@@ -67,6 +67,7 @@ public class Main {
 			
 			switch (select) {
 			case 1:
+				System.out.println("Generating data...");
 				clearData();
 				createPlayers();
 				createTrainers();
@@ -87,6 +88,7 @@ public class Main {
 				clearData();
 				break;
 			case 5:
+				System.out.println("Generating Tournament..");
 				createTournament();
 				break;
 			case 6:

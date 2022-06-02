@@ -1,7 +1,6 @@
 package classes;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Game {
 	
@@ -13,7 +12,7 @@ public class Game {
 	private int hostScore;
 	private int visitorScore;
 	
-	public Game(Equipo host, Equipo visitor, ArrayList<Arbitro> referees, Stadium stadium) {
+	public Game(int id, Equipo host, Equipo visitor, ArrayList<Arbitro> referees, Stadium stadium) {
 		this.host = host;
 		this.visitor = visitor;
 		this.referees = referees;
@@ -21,16 +20,17 @@ public class Game {
 			arbitro.addGame(this, null);
 		}
 		this.stadium = stadium;
-		this.id = SqlManager.insertGame(host.getId(), visitor.getId(), stadium.getId(), referees);
+		this.id = id;
 	}
 	
-	public Game(Equipo host, Equipo visitor, ArrayList<Arbitro> referees) {
+	public Game(int id ,Equipo host, Equipo visitor, ArrayList<Arbitro> referees) {
 		this.host = host;
 		this.visitor = visitor;
 		this.referees = referees;
 		for (Arbitro arbitro : referees) {
 			arbitro.addGame(this, null);
 		}
+		this.id = id;
 	}
 	
 	public void play() {

@@ -140,12 +140,13 @@ public class SqlManager {
 			st.close();
 			stmt.close();
 			
-			tournament = new Torneo(teams, referees, stadiums);
-			
 			query = "SELECT * from game;";
 			stmt = con.createStatement();
 			st = stmt.executeQuery(query);
+			
+			ArrayList<Game> insertgames = new ArrayList<>();
 			int gameCounter = 0;
+			int playedCounter = 0;
 			
 			while(st.next()) {
 				int id = st.getInt("id");
@@ -156,9 +157,10 @@ public class SqlManager {
 				Equipo visitor = new Equipo();
 				Stadium stadium = new Stadium();
 				ArrayList<Arbitro> gameRefs = new ArrayList<>();
+				gameCounter++;
 				
 				if(hostScore > 0 && visitorScore > 0)
-				gameCounter++;
+				playedCounter++;
 				
 				String query2 = "SELECT * from participate;";
 				Statement stmt2 = con.createStatement();
@@ -203,19 +205,24 @@ public class SqlManager {
 					}
 				}
 				
-				Game fetchedGame = new Game(host, visitor, gameRefs, stadium);
+				Game fetchedGame = new Game(id, host, visitor, gameRefs, stadium);
 				
 				fetchedGame.setHostScore(hostScore);
 				fetchedGame.setVisitorScore(visitorScore);				
 				
-				tournament.getGames().add(fetchedGame);
+				insertgames.add(fetchedGame);
 			}
+			
 			
 			st.close();
 			stmt.close();
 			
-			tournament.setPlayed(gameCounter);
-			tournament.setDays((int) gameCounter /3);
+			if(gameCounter > 0) {
+				tournament = new Torneo(teams, referees, stadiums);
+				tournament.getGames().addAll(insertgames);
+				tournament.setPlayed(playedCounter);
+				tournament.setDays(playedCounter /3);
+			}
 				
 		} catch (SQLException ex ) {
 			System.out.println(ex.getMessage());
@@ -441,7 +448,6 @@ public class SqlManager {
 		
 		try {
 			String query = "INSERT INTO game VALUES(NULL,?,0,0);";
-			
 			PreparedStatement statement = con.prepareStatement(query);
 			
 			statement.setInt(1 , stadiumId);
@@ -462,8 +468,8 @@ public class SqlManager {
 			System.out.println(ex.getMessage());
 		}
 		
-	insertParticipants(hostId, visitorId, id);
-	insertEnforcers(id, referees);
+		insertParticipants(hostId, visitorId, id);
+		insertEnforcers(id, referees);
 		
 		return id;
 	}
